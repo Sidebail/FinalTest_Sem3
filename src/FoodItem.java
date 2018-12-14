@@ -1,3 +1,8 @@
+/**
+ * Vladimir Vatsurin
+ * 200363172
+ */
+
 import javafx.scene.image.Image;
 
 public class FoodItem implements Comparable<FoodItem> {

@@ -1,3 +1,8 @@
+/**
+ * Vladimir Vatsurin
+ * 200363172
+ */
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -48,14 +53,17 @@ public class MenuController implements Initializable {
         @FXML
         void onAddToOrderClick(ActionEvent event) {
             if(!lvMenu.getSelectionModel().isEmpty()){
-                lCalories.setText(" " + menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()).getCalories());
-                lCost.setText(" $" + menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()).getPrice());
-
-                image.setImage(menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()).getImage());
+                totalCals = totalCals + menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()).getCalories();
+                totalCost = totalCost + menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()).getPrice();
 
 
 
+                cart.add(menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()));
+                addToCartView(menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()).toString());
+                lTotalCost.setText(" $" + String.format("%1$,.2f",cart.stream().mapToDouble(lb -> lb.getPrice()).sum()));
+                lTotalCals.setText(""+cart.stream().mapToDouble(lb -> lb.getCalories()).sum());
             }
+
         }
 
     @FXML
@@ -67,6 +75,7 @@ public class MenuController implements Initializable {
     void onListViewClick(MouseEvent event) {
         if(!lvMenu.getSelectionModel().isEmpty()){
             lCalories.setText(" " + menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()).getCalories());
+            //lCalories.setText(" " + menu.get().get(chosenCategory).stream().mapToDouble(lb -> lb.getPrice() * lb.getNumInStock()).sum());
             lCost.setText(" $" + menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()).getPrice());
 
             image.setImage(menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()).getImage());
@@ -76,10 +85,10 @@ public class MenuController implements Initializable {
     }
 
 
-    ArrayList<FoodItem> menuHelper;
-    ArrayList<FoodItem> cart;
-    double totalCals;
-    double totalCost;
+    private ArrayList<FoodItem> menuHelper;
+    private ArrayList<FoodItem> cart;
+    private double totalCals;
+    private double totalCost;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -101,16 +110,25 @@ public class MenuController implements Initializable {
     }
 
     public void updateView(TreeSet<FoodItem> ts){
-            lvMenu.getItems().clear();
+        image.setImage(null);
+        lCost.setText("0");
+        lCalories.setText("0");
+        lvMenu.getItems().clear();
+        menuHelper.clear();
 
             for (FoodItem item:ts){
                 lvMenu.getItems().add(item.toString());
             }
 
         for (FoodItem item:ts){
+
             menuHelper.add(item);
         }
 
+    }
+
+    public void addToCartView(String str){
+        lvCart.getItems().add(str);
     }
 
 

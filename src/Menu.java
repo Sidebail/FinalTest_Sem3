@@ -1,3 +1,8 @@
+/**
+ * Vladimir Vatsurin
+ * 200363172
+ */
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeMap;
