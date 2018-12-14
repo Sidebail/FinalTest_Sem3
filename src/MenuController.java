@@ -27,10 +27,10 @@ public class MenuController implements Initializable {
         private ComboBox<String> cbCategories;
 
         @FXML
-        private ListView<String> lvMenu;
+        private ListView<FoodItem> lvMenu;
 
         @FXML
-        private ListView<String> lvCart;
+        private ListView<FoodItem> lvCart;
 
         @FXML
         private Label lTotalCals;
@@ -50,46 +50,65 @@ public class MenuController implements Initializable {
         @FXML
         private Button bAddToOrder;
 
-        @FXML
+    /**
+     * Listener for AddToOrder button. Handles the management of labels and uses addToCartView method to add an item to a cart
+     * @param event
+     */
+    @FXML
         void onAddToOrderClick(ActionEvent event) {
             if(!lvMenu.getSelectionModel().isEmpty()){
-                totalCals = totalCals + menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()).getCalories();
-                totalCost = totalCost + menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()).getPrice();
+                totalCals = totalCals + lvMenu.getSelectionModel().getSelectedItem().getCalories();
+                totalCost = totalCost + lvMenu.getSelectionModel().getSelectedItem().getPrice();
 
 
 
-                cart.add(menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()));
-                addToCartView(menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()).toString());
+                cart.add(lvMenu.getSelectionModel().getSelectedItem());
+
+                addToCartView(lvMenu.getSelectionModel().getSelectedItem());
+
                 lTotalCost.setText(" $" + String.format("%1$,.2f",cart.stream().mapToDouble(lb -> lb.getPrice()).sum()));
                 lTotalCals.setText(""+cart.stream().mapToDouble(lb -> lb.getCalories()).sum());
             }
 
         }
 
+    /**
+     * ComboBox category change listener
+     * @param event
+     */
     @FXML
     void onCategoryChosen (ActionEvent event) {
         updateView(menu.getMenuItems(cbCategories.getValue()));
     }
 
+    /**
+     * ListView click listener, handles labels and image
+     * @param event
+     */
     @FXML
     void onListViewClick(MouseEvent event) {
         if(!lvMenu.getSelectionModel().isEmpty()){
-            lCalories.setText(" " + menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()).getCalories());
+            lCalories.setText(" " + lvMenu.getSelectionModel().getSelectedItem().getCalories());
             //lCalories.setText(" " + menu.get().get(chosenCategory).stream().mapToDouble(lb -> lb.getPrice() * lb.getNumInStock()).sum());
-            lCost.setText(" $" + menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()).getPrice());
+            lCost.setText(" $" + lvMenu.getSelectionModel().getSelectedItem().getPrice());
 
-            image.setImage(menuHelper.get(lvMenu.getSelectionModel().getSelectedIndex()).getImage());
+            image.setImage(lvMenu.getSelectionModel().getSelectedItem().getImage());
 
         }
 
     }
 
 
-    private ArrayList<FoodItem> menuHelper;
+
     private ArrayList<FoodItem> cart;
     private double totalCals;
     private double totalCost;
 
+    /**
+     * Initialize method for MenuController. Sets all variables
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
             lCost.setText("0");
@@ -98,7 +117,7 @@ public class MenuController implements Initializable {
             lTotalCost.setText("0");
             menu = new Menu();
             cart = new ArrayList<>();
-            menuHelper = new ArrayList<>();
+
             try {
                 menu.setMenu(MenuLoader.loadFoodItems());
             } catch (FileNotFoundException e) {
@@ -109,26 +128,30 @@ public class MenuController implements Initializable {
 
     }
 
+    /**
+     * Custom method to update the listView
+     * @param ts
+     */
     public void updateView(TreeSet<FoodItem> ts){
         image.setImage(null);
         lCost.setText("0");
         lCalories.setText("0");
         lvMenu.getItems().clear();
-        menuHelper.clear();
+
 
             for (FoodItem item:ts){
-                lvMenu.getItems().add(item.toString());
+                lvMenu.getItems().add(item);
             }
 
-        for (FoodItem item:ts){
-
-            menuHelper.add(item);
-        }
 
     }
 
-    public void addToCartView(String str){
-        lvCart.getItems().add(str);
+    /**
+     * Custom method to update the cart list view
+     * @param foodItem
+     */
+    public void addToCartView(FoodItem foodItem){
+        lvCart.getItems().add(foodItem);
     }
 
 

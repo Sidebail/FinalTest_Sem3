@@ -12,6 +12,13 @@ public class FoodItem implements Comparable<FoodItem> {
     private Image image;
     private double price;
 
+    /**
+     * FoodItem Constructor
+     * @param name
+     * @param calories
+     * @param image
+     * @param price
+     */
     public FoodItem(String name, int calories, Image image, double price){
         setName(name);
         setCalories(calories);
@@ -68,11 +75,20 @@ public class FoodItem implements Comparable<FoodItem> {
 
     }
 
+    /**
+     * Compare to method
+     * @param o
+     * @return
+     */
     @Override
     public int compareTo(FoodItem o) {
         return name.compareTo(o.getName());
     }
 
+    /**
+     * toString method
+     * @return
+     */
     @Override
     public String toString() {
         return name + "    $" + String.format("%1$,.2f",price);

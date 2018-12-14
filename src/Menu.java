@@ -11,18 +11,28 @@ import java.util.TreeSet;
 public class Menu {
     private TreeMap<String, TreeSet<FoodItem>> menu;
 
-
+    /**
+     * Menu constructor
+     */
     public Menu(){
 
         menu = new TreeMap<>();
     }
 
+    /**
+     * Setter for the menu
+     * @param tm
+     */
     public void setMenu(TreeMap<String, TreeSet<FoodItem>> tm){
 
         menu = tm;
 
     }
 
+    /**
+     * Meyhod that reurns all the categories
+     * @return
+     */
     public ArrayList<String> getCategories(){
         ArrayList<String> al = new ArrayList<>();
         al.add("All Categories");
@@ -32,6 +42,11 @@ public class Menu {
         return al;
     }
 
+    /**
+     * Method that returns all the menu items
+     * @param key
+     * @return
+     */
     public TreeSet<FoodItem> getMenuItems(String key){
         if(key.equals("All Categories")){
             TreeSet<FoodItem> menuTemp = new TreeSet<>();
